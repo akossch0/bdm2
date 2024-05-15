@@ -1,2 +1,10 @@
 pyspark==3.5.1
 ipykernel==6.29.4
+pandas==2.2.2
+python-dotenv==1.0.1
+black==24.4.2
+isort==5.13.2
+chardet==5.2.0
+ftfy==6.2.0
+fastavro==1.9.4
+matplotlib==3.8.4
