@@ -1,0 +1,11 @@
+2024-05-30 20:08:11,324 - data_reconciliation - INFO - Joining idealista with location_lookup
+2024-05-30 20:08:11,941 - data_reconciliation - INFO - There are 7855 listings in Barcelona
+2024-05-30 20:08:12,248 - data_reconciliation - INFO - There are 3382 listings with non-reconciled neighborhoods
+2024-05-30 20:08:12,486 - data_reconciliation - INFO - There are 21 unique non-reconciled neighborhoods
+2024-05-30 20:08:12,487 - data_reconciliation - INFO - Calculating jaccard similarity between non-reconciled neighborhoods and location_lookup neighborhoods to find matches
+2024-05-30 20:08:13,379 - data_reconciliation - INFO - There are 40 unique non-reconciled neighborhoods after filtering with jaccard similarity >= 0.3
+2024-05-30 20:08:13,379 - data_reconciliation - INFO - Sorting non-reconciled neighborhoods by jaccard similarity and dropping duplicates
+2024-05-30 20:08:13,390 - data_reconciliation - INFO - Manually correcting neighborhood 'El Gòtic' to id Q941385
+2024-05-30 20:08:13,404 - data_reconciliation - INFO - Adding 'El Poble Sec - Parc de Montjuïc' neighborhood with id Q980253 and 'Horta' neighborhood with id Q15225338
+2024-05-30 20:08:14,855 - data_reconciliation - INFO - There are 0 neighborhoods that could not be resolved
+2024-05-30 20:08:15,507 - data_reconciliation - INFO - Saving non-reconciled neighborhoods to mongodb

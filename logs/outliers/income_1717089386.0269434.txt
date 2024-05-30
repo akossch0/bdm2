@@ -1,0 +1,6 @@
+Column: any
+Number of outliers: 0
+Column: població
+Number of outliers: 0
+Column: índex rfd barcelona = 100
+Number of outliers: 17

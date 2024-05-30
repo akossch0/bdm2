@@ -1,0 +1,7 @@
+2024-05-30 20:55:18,329 - predict - INFO - Python version = 3.10
+2024-05-30 20:55:18,330 - predict - INFO - Spark version = 3.5.1
+2024-05-30 20:55:18,330 - predict - INFO - Loading data to predict on from MongoDB
+2024-05-30 20:55:19,998 - predict - INFO - Loading the transformation pipeline
+2024-05-30 20:55:31,415 - predict - INFO - Transforming the data
+2024-05-30 20:55:33,189 - predict - INFO - Loading the model
+2024-05-30 20:55:33,852 - predict - INFO - Predicting...

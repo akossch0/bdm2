@@ -1,0 +1,77 @@
+(.venv) root@akos-sch:~/uni-projects/bdm2# make model-inference
+Running pipeline for model inference...
+source .venv/bin/activate
+python -m src.exploitation.predict
+:: loading settings :: url = jar:file:/root/uni-projects/bdm2/.venv/lib/python3.10/site-packages/pyspark/jars/ivy-2.5.1.jar!/org/apache/ivy/core/settings/ivysettings.xml
+Ivy Default Cache set to: /root/.ivy2/cache
+The jars for the packages stored in: /root/.ivy2/jars
+org.apache.spark#spark-avro_2.12 added as a dependency
+org.mongodb.spark#mongo-spark-connector_2.12 added as a dependency
+:: resolving dependencies :: org.apache.spark#spark-submit-parent-8477eb3a-4b32-4d57-a29e-4336c70848cb;1.0
+        confs: [default]
+        found org.apache.spark#spark-avro_2.12;3.5.1 in central
+        found org.tukaani#xz;1.9 in central
+        found org.mongodb.spark#mongo-spark-connector_2.12;10.3.0 in central
+        found org.mongodb#mongodb-driver-sync;4.8.2 in central
+        [4.8.2] org.mongodb#mongodb-driver-sync;[4.8.1,4.8.99)
+        found org.mongodb#bson;4.8.2 in central
+        found org.mongodb#mongodb-driver-core;4.8.2 in central
+        found org.mongodb#bson-record-codec;4.8.2 in central
+:: resolution report :: resolve 2662ms :: artifacts dl 10ms
+        :: modules in use:
+        org.apache.spark#spark-avro_2.12;3.5.1 from central in [default]
+        org.mongodb#bson;4.8.2 from central in [default]
+        org.mongodb#bson-record-codec;4.8.2 from central in [default]
+        org.mongodb#mongodb-driver-core;4.8.2 from central in [default]
+        org.mongodb#mongodb-driver-sync;4.8.2 from central in [default]
+        org.mongodb.spark#mongo-spark-connector_2.12;10.3.0 from central in [default]
+        org.tukaani#xz;1.9 from central in [default]
+        ---------------------------------------------------------------------
+        |                  |            modules            ||   artifacts   |
+        |       conf       | number| search|dwnlded|evicted|| number|dwnlded|
+        ---------------------------------------------------------------------
+        |      default     |   7   |   1   |   0   |   0   ||   7   |   0   |
+        ---------------------------------------------------------------------
+:: retrieving :: org.apache.spark#spark-submit-parent-8477eb3a-4b32-4d57-a29e-4336c70848cb
+        confs: [default]
+        0 artifacts copied, 7 already retrieved (0kB/7ms)
+Setting default log level to "ERROR".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+2024-05-30 20:55:18,329 - predict - INFO - Python version = 3.10
+2024-05-30 20:55:18,330 - predict - INFO - Spark version = 3.5.1
+2024-05-30 20:55:18,330 - predict - INFO - Loading data to predict on from MongoDB
+2024-05-30 20:55:19,998 - predict - INFO - Loading the transformation pipeline
+2024/05/30 20:55:20 INFO mlflow.spark: 'models:/idealista_pipeline/2' resolved as 'mlflow-artifacts:/966258951268745414/d5841a1c7b18487b89d5a842779c1d2d/artifacts/idealista_pipeline'
+2024/05/30 20:55:21 INFO mlflow.spark: URI 'models:/idealista_pipeline/2/sparkml' does not point to the current DFS.
+2024/05/30 20:55:21 INFO mlflow.spark: File 'models:/idealista_pipeline/2/sparkml' not found on DFS. Will attempt to upload the file.
+2024-05-30 20:55:31,415 - predict - INFO - Transforming the data                
+2024-05-30 20:55:33,189 - predict - INFO - Loading the model
+2024/05/30 20:55:33 INFO mlflow.spark: 'models:/idealista_lr_model/2' resolved as 'mlflow-artifacts:/966258951268745414/d5841a1c7b18487b89d5a842779c1d2d/artifacts/idealista_lr_model'
+2024/05/30 20:55:33 INFO mlflow.spark: URI 'models:/idealista_lr_model/2/sparkml' does not point to the current DFS.
+2024/05/30 20:55:33 INFO mlflow.spark: File 'models:/idealista_lr_model/2/sparkml' not found on DFS. Will attempt to upload the file.
+2024-05-30 20:55:33,852 - predict - INFO - Predicting...
++------------------+
+|        prediction|
++------------------+
+| 2750191.784975894|
+|516392.36885232106|
+| 503062.5833018534|
+| 1139168.071342092|
+|1003731.0576997921|
+| 996029.6419506781|
+| 1459781.031138666|
+|1451853.4076549932|
+|1438462.4056035168|
+| 1662967.574656479|
+|1003894.2578196637|
+| 995771.1294626296|
+| 1499802.262058735|
+|1498196.9464022443|
+|  1490665.15807084|
+|1756375.7467834018|
+|1742935.2322241515|
+|129289.59623867273|
+| 335764.7648751512|
+| 344906.3329198323|
++------------------+
+only showing top 20 rows

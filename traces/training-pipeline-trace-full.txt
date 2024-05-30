@@ -1,0 +1,53 @@
+(.venv) root@akos-sch:~/uni-projects/bdm2# make model-training
+Running pipeline for model training...
+source .venv/bin/activate
+python -m src.exploitation.train
+:: loading settings :: url = jar:file:/root/uni-projects/bdm2/.venv/lib/python3.10/site-packages/pyspark/jars/ivy-2.5.1.jar!/org/apache/ivy/core/settings/ivysettings.xml
+Ivy Default Cache set to: /root/.ivy2/cache
+The jars for the packages stored in: /root/.ivy2/jars
+org.apache.spark#spark-avro_2.12 added as a dependency
+org.mongodb.spark#mongo-spark-connector_2.12 added as a dependency
+:: resolving dependencies :: org.apache.spark#spark-submit-parent-f705da0c-83d3-453d-a516-a6ad6f74902c;1.0
+        confs: [default]
+        found org.apache.spark#spark-avro_2.12;3.5.1 in central
+        found org.tukaani#xz;1.9 in central
+        found org.mongodb.spark#mongo-spark-connector_2.12;10.3.0 in central
+        found org.mongodb#mongodb-driver-sync;4.8.2 in central
+        [4.8.2] org.mongodb#mongodb-driver-sync;[4.8.1,4.8.99)
+        found org.mongodb#bson;4.8.2 in central
+        found org.mongodb#mongodb-driver-core;4.8.2 in central
+        found org.mongodb#bson-record-codec;4.8.2 in central
+:: resolution report :: resolve 2201ms :: artifacts dl 7ms
+        :: modules in use:
+        org.apache.spark#spark-avro_2.12;3.5.1 from central in [default]
+        org.mongodb#bson;4.8.2 from central in [default]
+        org.mongodb#bson-record-codec;4.8.2 from central in [default]
+        org.mongodb#mongodb-driver-core;4.8.2 from central in [default]
+        org.mongodb#mongodb-driver-sync;4.8.2 from central in [default]
+        org.mongodb.spark#mongo-spark-connector_2.12;10.3.0 from central in [default]
+        org.tukaani#xz;1.9 from central in [default]
+        ---------------------------------------------------------------------
+        |                  |            modules            ||   artifacts   |
+        |       conf       | number| search|dwnlded|evicted|| number|dwnlded|
+        ---------------------------------------------------------------------
+        |      default     |   7   |   1   |   0   |   0   ||   7   |   0   |
+        ---------------------------------------------------------------------
+:: retrieving :: org.apache.spark#spark-submit-parent-f705da0c-83d3-453d-a516-a6ad6f74902c
+        confs: [default]
+        0 artifacts copied, 7 already retrieved (0kB/6ms)
+Setting default log level to "ERROR".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+2024-05-30 20:51:27,255 - train - INFO - Python version = 3.10
+2024-05-30 20:51:27,256 - train - INFO - Spark version = 3.5.1
+2024-05-30 20:51:27,256 - train - INFO - Loading data from MongoDB
+2024-05-30 20:51:42,479 - train - INFO - Fitting the model                      
+Registered model 'idealista_lr_model' already exists. Creating a new version of this model...
+2024/05/30 20:52:04 INFO mlflow.store.model_registry.abstract_store: Waiting up to 300 seconds for model version to finish creation. Model name: idealista_lr_model, version 3
+Created version '3' of model 'idealista_lr_model'.
+Registered model 'idealista_pipeline' already exists. Creating a new version of this model...
+2024/05/30 20:52:25 INFO mlflow.store.model_registry.abstract_store: Waiting up to 300 seconds for model version to finish creation. Model name: idealista_pipeline, version 3
+Created version '3' of model 'idealista_pipeline'.
+2024-05-30 20:52:25,291 - train - INFO - RMSE: 8598.050785
+2024-05-30 20:52:25,291 - train - INFO - r2: 0.999795
+2024-05-30 20:52:26,743 - train - INFO - Test RMSE: 172911.372170               
+2024-05-30 20:52:26,743 - train - INFO - Test r2: 0.915706

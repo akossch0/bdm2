@@ -1,0 +1,20 @@
+Column: bathrooms
+Number of outliers: 332
+Column: distance
+Number of outliers: 0
+Column: latitude
+Number of outliers: 979
+Column: longitude
+Number of outliers: 0
+Column: numphotos
+Number of outliers: 55
+Column: parkingspace_parkingSpacePrice
+Number of outliers: 17672
+Column: price
+Number of outliers: 1026
+Column: pricebyarea
+Number of outliers: 251
+Column: rooms
+Number of outliers: 144
+Column: size
+Number of outliers: 1454

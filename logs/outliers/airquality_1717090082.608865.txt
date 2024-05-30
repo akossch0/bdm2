@@ -1,0 +1,52 @@
+Column: mes
+Number of outliers: 0
+Column: dia
+Number of outliers: 0
+Column: h01
+Number of outliers: 12368
+Column: h02
+Number of outliers: 12517
+Column: h03
+Number of outliers: 12269
+Column: h04
+Number of outliers: 12023
+Column: h05
+Number of outliers: 12009
+Column: h06
+Number of outliers: 12057
+Column: h07
+Number of outliers: 12094
+Column: h08
+Number of outliers: 12317
+Column: h09
+Number of outliers: 12801
+Column: h10
+Number of outliers: 13683
+Column: h11
+Number of outliers: 15094
+Column: h12
+Number of outliers: 15122
+Column: h13
+Number of outliers: 14851
+Column: h14
+Number of outliers: 14204
+Column: h15
+Number of outliers: 13575
+Column: h16
+Number of outliers: 13005
+Column: h17
+Number of outliers: 11936
+Column: h18
+Number of outliers: 11869
+Column: h19
+Number of outliers: 11919
+Column: h20
+Number of outliers: 11958
+Column: h21
+Number of outliers: 12244
+Column: h22
+Number of outliers: 12405
+Column: h23
+Number of outliers: 13002
+Column: h24
+Number of outliers: 30759

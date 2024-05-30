@@ -1,0 +1,15 @@
+2024-05-30 20:48:09,578 - multidimensional - INFO - Python version = 3.10
+2024-05-30 20:48:09,578 - multidimensional - INFO - Spark version = 3.5.1
+2024-05-30 20:48:09,579 - multidimensional - INFO - Removing all rows from tables if they exist
+2024-05-30 20:48:09,693 - multidimensional - INFO - Creating tables if they do not exist
+2024-05-30 20:48:09,701 - multidimensional - INFO - Reading data from MongoDB
+2024-05-30 20:48:12,546 - multidimensional - INFO - Loading location dimension table with 73 rows
+2024-05-30 20:48:17,046 - multidimensional - INFO - Loading year dimension table with 17 rows
+2024-05-30 20:48:18,708 - multidimensional - INFO - Loading month dimension table with 57 rows
+2024-05-30 20:48:20,036 - multidimensional - INFO - Loading day dimension table with 129 rows
+2024-05-30 20:48:21,371 - multidimensional - INFO - Loading income fact table with 803 rows
+2024-05-30 20:48:21,885 - multidimensional - INFO - First lookup: looking up neighborhood_id for idealista with location_lookup
+2024-05-30 20:48:22,588 - multidimensional - INFO - Out of 7855 listings in Barcelona, 3382 listings have non-reconciled neighborhoods
+2024-05-30 20:48:22,633 - multidimensional - INFO - Second lookup: looking up neighborhood_id for idealista with idealista_resolved_location_lookup
+2024-05-30 20:48:23,949 - multidimensional - INFO - There are 7855 listings in Barcelona, out of which 0 listings have non-reconciled neighborhoods after the second lookup
+2024-05-30 20:48:24,867 - multidimensional - INFO - Loading idealista fact table with 7855 rows

@@ -1,0 +1,205 @@
+(.venv) root@akos-sch:~/uni-projects/bdm2# make exploitation-multidim
+Running pipeline for multidimensional exploitation zone...
+source .venv/bin/activate
+python -m src.exploitation.multidimensional
+:: loading settings :: url = jar:file:/root/uni-projects/bdm2/.venv/lib/python3.10/site-packages/pyspark/jars/ivy-2.5.1.jar!/org/apache/ivy/core/settings/ivysettings.xml
+Ivy Default Cache set to: /root/.ivy2/cache
+The jars for the packages stored in: /root/.ivy2/jars
+org.apache.spark#spark-avro_2.12 added as a dependency
+org.mongodb.spark#mongo-spark-connector_2.12 added as a dependency
+org.postgresql#postgresql added as a dependency
+:: resolving dependencies :: org.apache.spark#spark-submit-parent-ad06db39-6a59-42e6-b90b-e55c06f9d959;1.0
+        confs: [default]
+        found org.apache.spark#spark-avro_2.12;3.5.1 in central
+        found org.tukaani#xz;1.9 in central
+        found org.mongodb.spark#mongo-spark-connector_2.12;10.3.0 in central
+        found org.mongodb#mongodb-driver-sync;4.8.2 in central
+        [4.8.2] org.mongodb#mongodb-driver-sync;[4.8.1,4.8.99)
+        found org.mongodb#bson;4.8.2 in central
+        found org.mongodb#mongodb-driver-core;4.8.2 in central
+        found org.mongodb#bson-record-codec;4.8.2 in central
+        found org.postgresql#postgresql;42.2.23 in central
+        found org.checkerframework#checker-qual;3.5.0 in central
+:: resolution report :: resolve 2691ms :: artifacts dl 15ms
+        :: modules in use:
+        org.apache.spark#spark-avro_2.12;3.5.1 from central in [default]
+        org.checkerframework#checker-qual;3.5.0 from central in [default]
+        org.mongodb#bson;4.8.2 from central in [default]
+        org.mongodb#bson-record-codec;4.8.2 from central in [default]
+        org.mongodb#mongodb-driver-core;4.8.2 from central in [default]
+        org.mongodb#mongodb-driver-sync;4.8.2 from central in [default]
+        org.mongodb.spark#mongo-spark-connector_2.12;10.3.0 from central in [default]
+        org.postgresql#postgresql;42.2.23 from central in [default]
+        org.tukaani#xz;1.9 from central in [default]
+        ---------------------------------------------------------------------
+        |                  |            modules            ||   artifacts   |
+        |       conf       | number| search|dwnlded|evicted|| number|dwnlded|
+        ---------------------------------------------------------------------
+        |      default     |   9   |   1   |   0   |   0   ||   9   |   0   |
+        ---------------------------------------------------------------------
+:: retrieving :: org.apache.spark#spark-submit-parent-ad06db39-6a59-42e6-b90b-e55c06f9d959
+        confs: [default]
+        0 artifacts copied, 9 already retrieved (0kB/7ms)
+Setting default log level to "ERROR".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+2024-05-30 19:15:17,800 - multidimensional - INFO - Python version = 3.10
+2024-05-30 19:15:17,801 - multidimensional - INFO - Spark version = 3.5.1
+2024-05-30 19:15:17,801 - multidimensional - INFO - Removing all rows from tables if they exist
+2024-05-30 19:15:18,102 - multidimensional - INFO - Creating tables if they do not exist
+2024-05-30 19:15:18,112 - multidimensional - INFO - Reading data from MongoDB
+2024-05-30 19:15:22,324 - multidimensional - INFO - Loading location dimension table with 73 rows
+2024-05-30 19:15:27,022 - multidimensional - INFO - Loading year dimension table with 17 rows
+2024-05-30 19:15:28,701 - multidimensional - INFO - Loading month dimension table with 57 rows
+2024-05-30 19:15:30,170 - multidimensional - INFO - Loading day dimension table with 129 rows
+2024-05-30 19:15:31,591 - multidimensional - INFO - Loading income fact table with 803 rows
+2024-05-30 19:15:32,110 - multidimensional - INFO - First lookup: looking up neighborhood_id for idealista with location_lookup
+2024-05-30 19:15:32,957 - multidimensional - INFO - Out of 7855 listings in Barcelona, 3382 listings have non-reconciled neighborhoods
+2024-05-30 19:15:33,010 - multidimensional - INFO - Second lookup: looking up neighborhood_id for idealista with idealista_resolved_location_lookup
+2024-05-30 19:15:34,329 - multidimensional - INFO - There are 7855 listings in Barcelona, out of which 0 listings have non-reconciled neighborhoods after the second lookup
+2024-05-30 19:15:35,158 - multidimensional - INFO - Loading idealista fact table with 7855 rows
+(.venv) root@akos-sch:~/uni-projects/bdm2# make formatted-pipeline
+Running formatting pipeline...
+source .venv/bin/activate
+python -m src.formatted_pipeline
+:: loading settings :: url = jar:file:/root/uni-projects/bdm2/.venv/lib/python3.10/site-packages/pyspark/jars/ivy-2.5.1.jar!/org/apache/ivy/core/settings/ivysettings.xml
+Ivy Default Cache set to: /root/.ivy2/cache
+The jars for the packages stored in: /root/.ivy2/jars
+org.apache.spark#spark-avro_2.12 added as a dependency
+org.mongodb.spark#mongo-spark-connector_2.12 added as a dependency
+:: resolving dependencies :: org.apache.spark#spark-submit-parent-82428356-7058-4eac-b8e7-99cc27c2d2c3;1.0
+        confs: [default]
+        found org.apache.spark#spark-avro_2.12;3.5.1 in central
+        found org.tukaani#xz;1.9 in central
+        found org.mongodb.spark#mongo-spark-connector_2.12;10.3.0 in central
+        found org.mongodb#mongodb-driver-sync;4.8.2 in central
+        [4.8.2] org.mongodb#mongodb-driver-sync;[4.8.1,4.8.99)
+        found org.mongodb#bson;4.8.2 in central
+        found org.mongodb#mongodb-driver-core;4.8.2 in central
+        found org.mongodb#bson-record-codec;4.8.2 in central
+:: resolution report :: resolve 2304ms :: artifacts dl 9ms
+        :: modules in use:
+        org.apache.spark#spark-avro_2.12;3.5.1 from central in [default]
+        org.mongodb#bson;4.8.2 from central in [default]
+        org.mongodb#bson-record-codec;4.8.2 from central in [default]
+        org.mongodb#mongodb-driver-core;4.8.2 from central in [default]
+        org.mongodb#mongodb-driver-sync;4.8.2 from central in [default]
+        org.mongodb.spark#mongo-spark-connector_2.12;10.3.0 from central in [default]
+        org.tukaani#xz;1.9 from central in [default]
+        ---------------------------------------------------------------------
+        |                  |            modules            ||   artifacts   |
+        |       conf       | number| search|dwnlded|evicted|| number|dwnlded|
+        ---------------------------------------------------------------------
+        |      default     |   7   |   1   |   0   |   0   ||   7   |   0   |
+        ---------------------------------------------------------------------
+:: retrieving :: org.apache.spark#spark-submit-parent-82428356-7058-4eac-b8e7-99cc27c2d2c3
+        confs: [default]
+        0 artifacts copied, 7 already retrieved (0kB/7ms)
+Setting default log level to "ERROR".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+2024-05-30 19:16:05,033 - __main__ - INFO - Python version = 3.10
+2024-05-30 19:16:05,034 - __main__ - INFO - Spark version = 3.5.1
+2024-05-30 19:16:09,031 - __main__ - INFO - Starting the pipeline at 2024-05-30 19:16:09
+2024-05-30 19:16:09,031 - __main__ - INFO - Starting to process LocationLookupDataSource
+2024-05-30 19:16:09,032 - data_formatters - INFO - LocationLookupDataSource: Union dataframes...
+2024-05-30 19:16:09,062 - data_formatters - INFO - LocationLookupDataSource: Union complete.
+2024-05-30 19:16:09,063 - data_formatters - INFO - LocationLookupDataSource: De-duplicating data...
+2024-05-30 19:16:10,558 - data_formatters - INFO - Size before de-duplication: 127
+2024-05-30 19:16:11,214 - data_formatters - INFO - Size after de-duplication: 73
+2024-05-30 19:16:11,214 - data_formatters - INFO - LocationLookupDataSource: De-duplication complete.
+2024-05-30 19:16:11,214 - data_formatters - INFO - LocationLookupDataSource: Fixing string encoding...
+2024-05-30 19:16:11,621 - data_formatters - INFO - LocationLookupDataSource: String encoding fixed.
+2024-05-30 19:16:11,622 - data_formatters - INFO - LocationLookupDataSource: Upserting data to MongoDB...
+2024-05-30 19:16:14,366 - data_formatters - INFO - LocationLookupDataSource: Upsert complete.
+2024-05-30 19:16:14,366 - __main__ - INFO - Finished processing LocationLookupDataSource in 0 minutes and 5 seconds
+2024-05-30 19:16:14,366 - __main__ - INFO - Starting to process AirQualityLookupDataSource
+2024-05-30 19:16:14,366 - data_formatters - INFO - AirQualityLookupDataSource: Lowercasing columns...
+2024-05-30 19:16:14,696 - data_formatters - INFO - AirQualityLookupDataSource: Columns lowercased.
+2024-05-30 19:16:14,697 - data_formatters - INFO - AirQualityLookupDataSource: Performing custom formatting...
+2024-05-30 19:16:14,720 - data_formatters - INFO - AirQualityLookupDataSource: Custom formatting complete.
+2024-05-30 19:16:14,721 - data_formatters - INFO - AirQualityLookupDataSource: Handling 2018 data separately...
+2024-05-30 19:16:14,885 - data_formatters - INFO - Size before de-duplication: 7
+2024-05-30 19:16:15,177 - data_formatters - INFO - Size after de-duplication: 7
+2024-05-30 19:16:15,923 - data_formatters - INFO - AirQualityLookupDataSource: 2018 data handled.
+2024-05-30 19:16:15,923 - data_formatters - INFO - AirQualityLookupDataSource: Union dataframes...
+2024-05-30 19:16:15,942 - data_formatters - INFO - AirQualityLookupDataSource: Union complete.
+2024-05-30 19:16:15,942 - data_formatters - INFO - AirQualityLookupDataSource: De-duplicating data...
+2024-05-30 19:16:16,153 - data_formatters - INFO - Size before de-duplication: 187
+2024-05-30 19:16:16,617 - data_formatters - INFO - Size after de-duplication: 30
+2024-05-30 19:16:16,617 - data_formatters - INFO - AirQualityLookupDataSource: De-duplication complete.
+2024-05-30 19:16:16,617 - data_formatters - INFO - AirQualityLookupDataSource: Fixing string encoding...
+2024-05-30 19:16:16,684 - data_formatters - INFO - AirQualityLookupDataSource: String encoding fixed.
+2024-05-30 19:16:16,684 - data_formatters - INFO - AirQualityLookupDataSource: Upserting data to MongoDB...
+2024-05-30 19:16:17,424 - data_formatters - INFO - AirQualityLookupDataSource: Upsert complete.
+2024-05-30 19:16:17,424 - __main__ - INFO - Finished processing AirQualityLookupDataSource in 0 minutes and 3 seconds
+2024-05-30 19:16:17,424 - __main__ - INFO - Starting to process IncomeDataSource
+2024-05-30 19:16:17,424 - data_formatters - INFO - IncomeDataSource: Lowercasing columns...
+2024-05-30 19:16:17,622 - data_formatters - INFO - IncomeDataSource: Columns lowercased.
+2024-05-30 19:16:17,622 - data_formatters - INFO - IncomeDataSource: Performing custom formatting...
+2024-05-30 19:16:17,740 - data_formatters - INFO - IncomeDataSource: Custom formatting complete.
+2024-05-30 19:16:17,741 - data_formatters - INFO - IncomeDataSource: Union dataframes...
+2024-05-30 19:16:17,770 - data_formatters - INFO - IncomeDataSource: Union complete.
+2024-05-30 19:16:17,770 - data_formatters - INFO - IncomeDataSource: De-duplicating data...
+2024-05-30 19:16:18,386 - data_formatters - INFO - Size before de-duplication: 803
+2024-05-30 19:16:19,143 - data_formatters - INFO - Size after de-duplication: 803
+2024-05-30 19:16:19,143 - data_formatters - INFO - IncomeDataSource: De-duplication complete.
+2024-05-30 19:16:19,143 - data_formatters - INFO - IncomeDataSource: Fixing string encoding...
+2024-05-30 19:16:19,208 - data_formatters - INFO - IncomeDataSource: String encoding fixed.
+2024-05-30 19:16:19,208 - data_formatters - INFO - IncomeDataSource: Logging univariate outliers...
+2024-05-30 19:16:34,735 - data_formatters - INFO - IncomeDataSource: Done.      
+2024-05-30 19:16:34,735 - data_formatters - INFO - IncomeDataSource: Upserting data to MongoDB...
+2024-05-30 19:16:36,704 - data_formatters - INFO - IncomeDataSource: Upsert complete.
+2024-05-30 19:16:36,705 - __main__ - INFO - Finished processing IncomeDataSource in 0 minutes and 19 seconds
+2024-05-30 19:16:36,705 - __main__ - INFO - Starting to process IdealistaDataSource
+2024-05-30 19:16:36,705 - data_formatters - INFO - IdealistaDataSource: Lowercasing columns, flatterning dataframe...
+2024-05-30 19:16:54,824 - data_formatters - INFO - IdealistaDataSource: Done.
+2024-05-30 19:16:54,824 - data_formatters - INFO - IdealistaDataSource: Performing custom formatting...
+2024-05-30 19:17:03,948 - data_formatters - INFO - IdealistaDataSource: Custom formatting complete.
+2024-05-30 19:17:03,948 - data_formatters - INFO - IdealistaDataSource: Union dataframes...
+2024-05-30 19:17:19,047 - data_formatters - INFO - IdealistaDataSource: Union complete.
+2024-05-30 19:17:19,047 - data_formatters - INFO - IdealistaDataSource: De-duplicating data...
+2024-05-30 19:17:21,894 - data_formatters - INFO - Size before de-duplication: 21073
+2024-05-30 19:17:27,299 - data_formatters - INFO - Size after de-duplication: 21065
+2024-05-30 19:17:27,300 - data_formatters - INFO - IdealistaDataSource: De-duplication complete.
+2024-05-30 19:17:27,300 - data_formatters - INFO - IdealistaDataSource: Fixing string encoding...
+2024-05-30 19:17:34,107 - data_formatters - INFO - IdealistaDataSource: String encoding fixed.
+2024-05-30 19:17:34,107 - data_formatters - INFO - IdealistaDataSource: Logging univariate outliers...
+2024-05-30 19:22:22,511 - data_formatters - INFO - IdealistaDataSource: Done.   
+2024-05-30 19:22:22,511 - data_formatters - INFO - IdealistaDataSource: Upserting data to MongoDB...
+2024-05-30 19:24:03,977 - data_formatters - INFO - IdealistaDataSource: Upsert complete.
+2024-05-30 19:24:03,977 - __main__ - INFO - Finished processing IdealistaDataSource in 7 minutes and 27 seconds
+2024-05-30 19:24:03,977 - __main__ - INFO - Starting to process AirQualityDataSource
+2024-05-30 19:24:03,977 - data_formatters - INFO - AirQualityDataSource: Lowercasing columns...
+2024-05-30 19:24:18,001 - data_formatters - INFO - AirQualityDataSource: Columns lowercased.
+2024-05-30 19:24:18,001 - data_formatters - INFO - AirQualityDataSource: Splitting dataframes into old and new dataframes...
+2024-05-30 19:24:18,032 - data_formatters - INFO - AirQualityDataSource: Splitting complete. There are 10 old dataframes and 57 new dataframes.
+2024-05-30 19:24:18,032 - data_formatters - INFO - AirQualityDataSource: Processing new data...
+2024-05-30 19:24:18,032 - data_formatters - INFO - AirQualityDataSource: Performing custom formatting...
+2024-05-30 19:24:18,477 - data_formatters - INFO - AirQualityDataSource: Custom formatting complete.
+2024-05-30 19:24:18,477 - data_formatters - INFO - AirQualityDataSource: Union dataframes...
+2024-05-30 19:24:24,685 - data_formatters - INFO - AirQualityDataSource: Union complete.
+2024-05-30 19:24:24,685 - data_formatters - INFO - AirQualityDataSource: De-duplicating data...
+2024-05-30 19:24:26,105 - data_formatters - INFO - Size before de-duplication: 95226
+2024-05-30 19:24:29,277 - data_formatters - INFO - Size after de-duplication: 95226
+2024-05-30 19:24:29,277 - data_formatters - INFO - AirQualityDataSource: De-duplication complete.
+2024-05-30 19:24:29,277 - data_formatters - INFO - AirQualityDataSource: Fixing string encoding...
+2024-05-30 19:24:38,723 - data_formatters - INFO - AirQualityDataSource: String encoding fixed.
+2024-05-30 19:24:38,723 - data_formatters - INFO - AirQualityDataSource: Logging univariate outliers...
+2024-05-30 19:33:18,791 - data_formatters - INFO - AirQualityDataSource: Done.  
+2024-05-30 19:33:18,791 - data_formatters - INFO - AirQualityDataSource: Upserting data to MongoDB...
+2024-05-30 20:08:11,131 - data_formatters - INFO - AirQualityDataSource: Upsert complete.
+2024-05-30 20:08:11,132 - data_formatters - INFO - AirQualityDataSource: Processing complete for new data.
+2024-05-30 20:08:11,132 - __main__ - INFO - Finished processing AirQualityDataSource in 44 minutes and 7 seconds
+2024-05-30 20:08:11,132 - __main__ - INFO - Starting the reconciliation process
+2024-05-30 20:08:11,324 - data_reconciliation - INFO - Joining idealista with location_lookup
+2024-05-30 20:08:11,941 - data_reconciliation - INFO - There are 7855 listings in Barcelona
+2024-05-30 20:08:12,248 - data_reconciliation - INFO - There are 3382 listings with non-reconciled neighborhoods
+2024-05-30 20:08:12,486 - data_reconciliation - INFO - There are 21 unique non-reconciled neighborhoods
+2024-05-30 20:08:12,487 - data_reconciliation - INFO - Calculating jaccard similarity between non-reconciled neighborhoods and location_lookup neighborhoods to find matches
+2024-05-30 20:08:13,379 - data_reconciliation - INFO - There are 40 unique non-reconciled neighborhoods after filtering with jaccard similarity >= 0.3
+2024-05-30 20:08:13,379 - data_reconciliation - INFO - Sorting non-reconciled neighborhoods by jaccard similarity and dropping duplicates
+2024-05-30 20:08:13,390 - data_reconciliation - INFO - Manually correcting neighborhood 'El Gòtic' to id Q941385
+2024-05-30 20:08:13,404 - data_reconciliation - INFO - Adding 'El Poble Sec - Parc de Montjuïc' neighborhood with id Q980253 and 'Horta' neighborhood with id Q15225338
+2024-05-30 20:08:14,855 - data_reconciliation - INFO - There are 0 neighborhoods that could not be resolved
+2024-05-30 20:08:15,507 - data_reconciliation - INFO - Saving non-reconciled neighborhoods to mongodb
+2024-05-30 20:08:16,287 - __main__ - INFO - Finished the reconciliation process in 0 minutes and 5 seconds
+2024-05-30 20:08:16,287 - __main__ - INFO - Finished the formatted pipeline in 52 minutes and 7 seconds
