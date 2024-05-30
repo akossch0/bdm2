@@ -2,54 +2,44 @@
 
 This is the repository for the second project of the Big Data Management course. It consists of the implementation of the Formatted and Exploitation zones in the Data Management Backbone.
 
-## Additional dataset - Air quality
-As part of the project, we decided to integrate air quality data from the Open Data BCN platform. The data is available in two datasets:
-- stations - https://opendata-ajuntament.barcelona.cat/data/ca/dataset/qualitat-aire-estacions-bcn
-- measurements - https://opendata-ajuntament.barcelona.cat/data/en/dataset/qualitat-aire-detall-bcn
-
 ## Project setup
 **Pre-requisites**:
-- Python >= 3.8
-- Pip >= 21.0
-
-### **Windows**
-prerequisites:
-- chocolatey
-
-**Install make**:
-(run as administrator)
-```PowerShell
-choco install make
-```
+- `python >= 3.8`
+- `pip >= 21.0`
+- `make >= 4.2.1`
 
 **Create venv, and install dependencies**:
-```PowerShell
+```bash
 make install
 ```
 
-**Create .env file for pipeline configuration**:
-Create a .env file based on the .env_template file and fill in the necessary information (only HDFS_URL needs to be adjusted, pointing to the HDFS namenode address). The other variables are already set to the default values.
-
-**Run the pipeline**:
-```PowerShell
-make pipeline
-```
-
-### **UNIX-like systems**
-**Create venv, and install dependencies**:
+**Run setup script that sets necessary environment variables**:
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+source setup.sh
 ```
 
 **Create .env file for pipeline configuration**:
-Same as in the Windows setup.
+Create a `.env` file based on the `.env_template` file and fill in the necessary information (depending on the MongoDB, PostgreSQL, and MLflow deployments, the hosts 
+and ports for said tools need to be adjusted). The other variables are already set to the default values. The MongoDB collection on which the predictive exploitation zone needs to be adjusted depending on predictive needs, as well as the model, transformation pipeline name and versions.
 
-**Run the pipeline**:
+**Run the formatted pipeline**:
 ```bash
-source .venv/bin/activate
-python src/data_io/pipeline.py
+make formatted-pipeline 
+```
+
+**Run the multidimensional exploitation pipeline**:
+```bash
+make exploitation-multidim
+```
+
+**Run model training pipeline**:
+```bash
+make model-training
+```
+
+**Run model inference pipeline**, adjust target collection and model/transformation pipeline version in the `.env` file:
+```bash
+make model-inference
 ```
 
 ## OpenNebula credentials
@@ -58,43 +48,31 @@ python src/data_io/pipeline.py
 
 # Appendix
 We had some problems with the OpenNebula platform, so we decided to also use a local Hadoop cluster with Docker. Below are the instructions to set up the cluster.
-## Setup Hadoop cluster locally with docker
+## Setup PostgreSQL instance with docker
 
 Prerequisites:
-- Docker
-- Docker Compose
+- `docker`
 
-1. Go to desired directory and clone the repository:
-```PowerShell
-git clone https://github.com/big-data-europe/docker-hadoop
+1. Pull the PostgreSQL image:
+```bash
+docker pull postgres
 ```
 
-2. Go to the cloned directory:
-```PowerShell
-cd docker-hadoop
+2. Run the PostgreSQL container:
+```bash
+docker run -itd -e POSTGRES_USER=<USER> -e POSTGRES_PASSWORD=<PASSWORD> -p 5432:5432
 ```
 
-3. Start the cluster (takes a couple of minutes):
-```PowerShell
-docker-compose up -d
-```
+## Setup MongoDB instance with docker
 
-4. Check if the cluster is running:
-```PowerShell
-docker ps
-```
+We also made a local installation of MongoDB with Docker. [Here](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-community-with-docker/) is the link to the setup instructions.
 
-5. Enter the namenode container:
-```PowerShell
-docker exec -it namenode bash
-```
+## Additional dataset - Air quality
+As part of the project, we decided to integrate air quality data from the Open Data BCN platform. The data is available in two datasets:
+- stations - https://opendata-ajuntament.barcelona.cat/data/ca/dataset/qualitat-aire-estacions-bcn
+- measurements - https://opendata-ajuntament.barcelona.cat/data/en/dataset/qualitat-aire-detall-bcn
 
-6. Create a directory in HDFS:
-```PowerShell
-hadoop fs -mkdir -p /user/bdm
-```
 
-7. Give permissions to the directory:
-```PowerShell
-hadoop fs -chmod -R 777 /user/bdm
-```
+# Contributors
+- Darryl Abraham
+- Ákos Schneider
