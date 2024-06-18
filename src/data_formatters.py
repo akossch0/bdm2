@@ -4,10 +4,8 @@ import time
 from typing import List
 
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import (approx_count_distinct, col, lit, pandas_udf,
-                                   udf)
-from pyspark.sql.types import (DoubleType, IntegerType, NullType, NumericType,
-                               StringType, StructType)
+from pyspark.sql.functions import approx_count_distinct, col, lit, pandas_udf, udf
+from pyspark.sql.types import DoubleType, IntegerType, NullType, NumericType, StringType, StructType
 
 from logging_config import configure_logger
 from utils import fix_encoding, flatten_dataframe, str_to_float
@@ -62,27 +60,49 @@ class BaseDataSource:
         manual_column_types: dict = None,
         cast_all: bool = False,
     ) -> None:
+        """
+        Perform custom formatting on a collection of dataframes. This includes adding missing columns,
+        checking data type consistency, and adding a temporal column.
+
+        :param self: self
+        :param temporal_column_name: The name of the temporal column to add to each dataframe.
+        :param manual_column_types: A dictionary of column names and their data types for manual casting.
+        :param cast_all: A boolean flag to indicate whether to cast all columns.
+        :return: None
+        """
+
         class_name = self.__class__.__name__
 
         def get_nested_fields():
+            """
+            Get nested fields from the dataframes.
+
+            :return: A set of nested field names.
+            """
             nested = set()
             for df in self.dfs.values():
-                nested.update(
-                    {
-                        field.name
-                        for field in df.schema.fields
-                        if isinstance(field.dataType, StructType)
-                    }
-                )
+                nested.update({field.name for field in df.schema.fields if isinstance(field.dataType, StructType)})
             return nested
 
         def get_all_columns(nested_fields):
+            """
+            Get all columns from the dataframes excluding nested fields.
+
+            :param nested_fields: A set of nested field names.
+            :return: A set of all column names.
+            """
             all_cols = set()
             for df in self.dfs.values():
                 all_cols.update(df.columns)
             return all_cols - nested_fields
 
         def get_column_data_types(manual_types: dict = None):
+            """
+            Get the data types for each column in the dataframes.
+
+            :param manual_types: A dictionary of column names and their data types for manual casting.
+            :return: A dictionary of column names and their data types.
+            """
             col_types = {}
             for df in self.dfs.values():
                 for col in df.columns:
@@ -94,6 +114,11 @@ class BaseDataSource:
             return col_types
 
         def log_missing_columns_info():
+            """
+            Log information about missing columns in the dataframes.
+
+            :return: A dictionary of days and their corresponding missing columns.
+            """
             missing_cols_info = {}
             for day, df in self.dfs.items():
                 missing_cols = all_columns - set(df.columns)
@@ -105,6 +130,11 @@ class BaseDataSource:
             return missing_cols_info
 
         def add_missing_columns():
+            """
+            Add missing columns to the dataframes with null values.
+
+            :return: None
+            """
             for day in self.dfs:
                 df = self.dfs[day]
                 for col in all_columns - set(df.columns):
@@ -112,73 +142,65 @@ class BaseDataSource:
                 self.dfs[day] = df.select(sorted(all_columns))
 
         def check_data_type_consistency():
+            """
+            Check the consistency of data types across the dataframes.
+
+            :return: A dictionary of column names and their inconsistent data types.
+            """
             dtype_counter = {}
             for df in self.dfs.values():
                 for col in df.columns:
                     dtype = df.schema[col].dataType
-                    dtype_counter[f"{col} - {dtype}"] = (
-                        dtype_counter.get(f"{col} - {dtype}", 0) + 1
-                    )
-            return {
-                col_type: count
-                for col_type, count in dtype_counter.items()
-                if count != len(self.dfs)
-            }
+                    dtype_counter[f"{col} - {dtype}"] = dtype_counter.get(f"{col} - {dtype}", 0) + 1
+            return {col_type: count for col_type, count in dtype_counter.items() if count != len(self.dfs)}
 
-        def cast_columns_to_correct_type(
-            manual_column_to_cast: list = None, cast_all: bool = False
-        ):
+        def cast_columns_to_correct_type(manual_column_to_cast: list = None, cast_all: bool = False):
+            """
+            Cast columns to their correct data types.
+
+            :param manual_column_to_cast: A list of columns to cast manually.
+            :param cast_all: A boolean flag to indicate whether to cast all columns.
+            :return: None
+            """
             for day in self.dfs:
                 df = self.dfs[day]
                 for col in df.columns:
-                    if (
-                        cast_all
-                        or df.schema[col].dataType == NullType()
-                        or col in manual_column_to_cast
-                    ):
+                    if cast_all or df.schema[col].dataType == NullType() or col in manual_column_to_cast:
                         df = df.withColumn(col, df[col].cast(column_data_types[col]))
                 self.dfs[day] = df
 
         def add_temporal_column(temporal_column: str):
+            """
+            Add a temporal column to each dataframe.
+
+            :param temporal_column: The name of the temporal column to add.
+            :return: None
+            """
             for key in self.dfs:
                 self.dfs[key] = self.dfs[key].withColumn(temporal_column, lit(key))
 
         nested_fields = get_nested_fields()
         all_columns = get_all_columns(nested_fields)
-        logger.debug(
-            f"{class_name}: There are {len(all_columns)} unique columns in the dataframes"
-        )
+        logger.debug(f"{class_name}: There are {len(all_columns)} unique columns in the dataframes")
 
         column_data_types = get_column_data_types(manual_column_types)
 
         missing_columns_info = log_missing_columns_info()
         nr_of_incomplete_dfs = len(missing_columns_info)
-        frequently_missing_cols = (
-            set.union(*missing_columns_info.values()) if missing_columns_info else set()
-        )
-        logger.debug(
-            f"{class_name}: There are {nr_of_incomplete_dfs} incomplete dataframes out of {len(self.dfs)}"
-        )
-        logger.debug(
-            f"{class_name}: There are {len(frequently_missing_cols)} frequently missing columns: {frequently_missing_cols}"
-        )
+        frequently_missing_cols = set.union(*missing_columns_info.values()) if missing_columns_info else set()
+        logger.debug(f"{class_name}: There are {nr_of_incomplete_dfs} incomplete dataframes out of {len(self.dfs)}")
+        logger.debug(f"{class_name}: There are {len(frequently_missing_cols)} frequently missing columns: {frequently_missing_cols}")
         if nr_of_incomplete_dfs > 0:
             logger.debug(f"{class_name}: Creating missing columns with null values...")
             add_missing_columns()
 
             missing_columns_info = log_missing_columns_info()
             nr_of_incomplete_dfs = len(missing_columns_info)
-            frequently_missing_cols = (
-                set.union(*missing_columns_info.values())
-                if missing_columns_info
-                else set()
-            )
+            frequently_missing_cols = set.union(*missing_columns_info.values()) if missing_columns_info else set()
             logger.debug(
                 f"{class_name}: There are {nr_of_incomplete_dfs} incomplete dataframes out of {len(self.dfs)} after adding missing columns"
             )
-            logger.debug(
-                f"{class_name}: There are {len(frequently_missing_cols)} frequently missing columns: {frequently_missing_cols}"
-            )
+            logger.debug(f"{class_name}: There are {len(frequently_missing_cols)} frequently missing columns: {frequently_missing_cols}")
             if nr_of_incomplete_dfs > 0:
                 raise ValueError(
                     f"{class_name}: There are still incomplete dataframes after adding missing columns: {missing_columns_info}"
@@ -187,9 +209,7 @@ class BaseDataSource:
         logger.debug(f"{class_name}: Checking data type consistency...")
         columns_needing_fix = check_data_type_consistency()
         nr_cols_needing_fix = len({col.split(" - ")[0] for col in columns_needing_fix})
-        logger.debug(
-            f"{class_name}: There are {nr_cols_needing_fix} columns that need fixing: {columns_needing_fix}"
-        )
+        logger.debug(f"{class_name}: There are {nr_cols_needing_fix} columns that need fixing: {columns_needing_fix}")
         if nr_cols_needing_fix > 0:
             logger.debug(f"{class_name}: Casting to correct data type...")
             cast_columns_to_correct_type(
@@ -198,9 +218,7 @@ class BaseDataSource:
             )
 
             columns_needing_fix = check_data_type_consistency()
-            nr_cols_needing_fix = len(
-                {col.split(" - ")[0] for col in columns_needing_fix}
-            )
+            nr_cols_needing_fix = len({col.split(" - ")[0] for col in columns_needing_fix})
             logger.debug(
                 f"{class_name}: There are {nr_cols_needing_fix} columns that need fixing: {columns_needing_fix} after casting to correct data type"
             )
@@ -209,7 +227,7 @@ class BaseDataSource:
                     f"{class_name}: There are still columns that need fixing after casting to correct data type: {columns_needing_fix}"
                 )
 
-        add_temporal_column(temporal_column_name)  # day
+        add_temporal_column(temporal_column_name)
 
     def union_dataframes(self) -> None:
         if type(self.dfs) == list:
@@ -226,16 +244,12 @@ class BaseDataSource:
         else:
             raise ValueError("Dataframes must be a list or a dictionary.")
 
-    def detect_continuous_variables(
-        self, distinct_threshold: int, drop_vars: List[str] = []
-    ) -> list[str]:
+    def detect_continuous_variables(self, distinct_threshold: int, drop_vars: List[str] = []) -> list[str]:
         continuous_columns = []
         for column in self.merged_df.drop(*drop_vars).columns:
             dtype = self.merged_df.schema[column].dataType
             if isinstance(dtype, (IntegerType, NumericType, DoubleType)):
-                distinct_count = self.merged_df.select(
-                    approx_count_distinct(column)
-                ).collect()[0][0]
+                distinct_count = self.merged_df.select(approx_count_distinct(column)).collect()[0][0]
                 if distinct_count > distinct_threshold:
                     continuous_columns.append(column)
         return continuous_columns
@@ -259,9 +273,7 @@ class BaseDataSource:
             lower_bound = q1 - factor * iqr
             upper_bound = q3 + factor * iqr
 
-            outliers = self.merged_df.filter(
-                (col(column) < lit(lower_bound)) | (col(column) > lit(upper_bound))
-            )
+            outliers = self.merged_df.filter((col(column) < lit(lower_bound)) | (col(column) > lit(upper_bound)))
             all_outliers[column] = outliers
             # num_outliers = outliers.count()
             logger.debug(
@@ -271,10 +283,7 @@ class BaseDataSource:
             # Filter outliers and update the DataFrame
             if delete_outliers:
                 logger.debug(f"{class_name}: Deleting outliers in column {column}.")
-                self.merged_df = self.merged_df.filter(
-                    (col(column) >= lit(lower_bound))
-                    & (col(column) <= lit(upper_bound))
-                )
+                self.merged_df = self.merged_df.filter((col(column) >= lit(lower_bound)) & (col(column) <= lit(upper_bound)))
         self.outliers = all_outliers
 
     def log_outliers(self):
@@ -309,35 +318,27 @@ class BaseDataSource:
         fix_encoding_udf = pandas_udf(fix_encoding, StringType())
         for column in self.merged_df.columns:
             if self.merged_df.schema[column].dataType == StringType():
-                self.merged_df = self.merged_df.withColumn(
-                    column, fix_encoding_udf(column)
-                )
+                self.merged_df = self.merged_df.withColumn(column, fix_encoding_udf(column))
 
     def upsert_formatted_db(self, collection_name: str = None) -> None:
         write_config = {
             "writeConcern.w": "majority",
             "replaceDocument": "false",
-            "idFieldList": ",".join(
-                self.identifiers
-            ),  # Specify the field to use for upsert
+            "idFieldList": ",".join(self.identifiers),  # Specify the field to use for upsert
             "operationType": "update",  # Specify the update operation
             "upsertDocument": "true",  # Enable upsert logic
         }
         collection_n = collection_name if collection_name else self.target_collection
-        self.merged_df.write.format("mongodb").mode("append").option(
-            "database", self.target_db
-        ).option("collection", collection_n).options(**write_config).save()
+        self.merged_df.write.format("mongodb").mode("append").option("database", self.target_db).option("collection", collection_n).options(
+            **write_config
+        ).save()
 
 
 class LocationLookupDataSource(BaseDataSource):
 
     def set_up(self) -> None:
         files = os.listdir(self.source_folder)
-        files = [
-            file
-            for file in files
-            if file.startswith("idealista") or file.startswith("income")
-        ]
+        files = [file for file in files if file.startswith("idealista") or file.startswith("income")]
         files = [f"{self.source_folder}/{file}" for file in files]
         self.dfs = []
         for file in files:
@@ -445,9 +446,7 @@ class IncomeDataSource(BaseDataSource):
         # filter out from all dfs where codi_districte is not in the range of 1 and 10, and codi_barri is not in the range of 1 and 73
         for year in self.dfs:
             df = self.dfs[year]
-            df = df.filter(
-                df["codi_districte"].between(1, 10) & df["codi_barri"].between(1, 73)
-            )
+            df = df.filter(df["codi_districte"].between(1, 10) & df["codi_barri"].between(1, 73))
             self.dfs[year] = df
 
         str_to_float_udf = udf(str_to_float, DoubleType())
@@ -490,12 +489,8 @@ class IncomeDataSource(BaseDataSource):
             logger.info(f"{class_name}: Deleting univariate outliers...")
         else:
             logger.info(f"{class_name}: Logging univariate outliers...")
-        columns = self.detect_continuous_variables(
-            10, drop_vars=["codi_districte", "codi_barri"]
-        )
-        self.iqr_outlier_treatment(
-            columns, factor=3.0, delete_outliers=self.delete_outliers
-        )
+        columns = self.detect_continuous_variables(10, drop_vars=["codi_districte", "codi_barri"])
+        self.iqr_outlier_treatment(columns, factor=3.0, delete_outliers=self.delete_outliers)
         self.log_outliers()
         logger.info(f"{class_name}: Done.")
 
@@ -551,12 +546,8 @@ class IdealistaDataSource(BaseDataSource):
             logger.info(f"{class_name}: Deleting univariate outliers...")
         else:
             logger.info(f"{class_name}: Logging univariate outliers...")
-        columns = self.detect_continuous_variables(
-            10, drop_vars=["codi_districte", "codi_barri"]
-        )
-        self.iqr_outlier_treatment(
-            columns, factor=3.0, delete_outliers=self.delete_outliers
-        )
+        columns = self.detect_continuous_variables(10, drop_vars=["codi_districte", "codi_barri"])
+        self.iqr_outlier_treatment(columns, factor=3.0, delete_outliers=self.delete_outliers)
         self.log_outliers()
         logger.info(f"{class_name}: Done.")
 
@@ -585,16 +576,12 @@ class AirQualityDataSource(BaseDataSource):
         self.lowercase_columns()
         logger.info(f"{class_name}: Columns lowercased.")
 
-        logger.info(
-            f"{class_name}: Splitting dataframes into old and new dataframes..."
-        )
+        logger.info(f"{class_name}: Splitting dataframes into old and new dataframes...")
         # filter dfs with less than or equal to 1 columns
         self.dfs = {month: df for month, df in self.dfs.items() if len(df.columns) > 1}
         dfs_old = {month: self.dfs[month] for month in self.dfs if month <= "2019_03"}
         dfs_new = {month: self.dfs[month] for month in self.dfs if month > "2019_03"}
-        logger.info(
-            f"{class_name}: Splitting complete. There are {len(dfs_old)} old dataframes and {len(dfs_new)} new dataframes."
-        )
+        logger.info(f"{class_name}: Splitting complete. There are {len(dfs_old)} old dataframes and {len(dfs_new)} new dataframes.")
         old_identifiers = ["codi_eoi", "codi_dtes", "datetime"]
         new_identifiers = self.identifiers
         for i, dfs in enumerate([dfs_old, dfs_new]):
@@ -644,9 +631,7 @@ class AirQualityDataSource(BaseDataSource):
                     "codi_contaminant",
                 ],
             )
-            self.iqr_outlier_treatment(
-                columns, factor=3.0, delete_outliers=self.delete_outliers
-            )
+            self.iqr_outlier_treatment(columns, factor=3.0, delete_outliers=self.delete_outliers)
             self.log_outliers()
             logger.info(f"{class_name}: Done.")
 

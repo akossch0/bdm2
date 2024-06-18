@@ -91,11 +91,7 @@ def fix_encoding(s: pd.Series) -> pd.Series:
 
 def flatten_dataframe(df: DataFrame) -> DataFrame:
     # Check for nested fields in DataFrame schema
-    complex_fields = [
-        f.name
-        for f in df.schema.fields
-        if f.dataType.simpleString().startswith("struct")
-    ]
+    complex_fields = [f.name for f in df.schema.fields if f.dataType.simpleString().startswith("struct")]
 
     while complex_fields:
         col_exprs = []
@@ -104,10 +100,7 @@ def flatten_dataframe(df: DataFrame) -> DataFrame:
                 # Add nested fields to the column expression list
                 nested_fields = field.dataType.fields
                 col_exprs += [
-                    col(f"{field.name}.{nested_field.name}").alias(
-                        f"{field.name}_{nested_field.name}"
-                    )
-                    for nested_field in nested_fields
+                    col(f"{field.name}.{nested_field.name}").alias(f"{field.name}_{nested_field.name}") for nested_field in nested_fields
                 ]
             else:
                 # Retain non-nested fields as is
@@ -116,11 +109,7 @@ def flatten_dataframe(df: DataFrame) -> DataFrame:
         # Select all columns based on the constructed column expressions
         df = df.select(*col_exprs)
         # Check again if there are nested fields after transformation
-        complex_fields = [
-            f.name
-            for f in df.schema.fields
-            if f.dataType.simpleString().startswith("struct")
-        ]
+        complex_fields = [f.name for f in df.schema.fields if f.dataType.simpleString().startswith("struct")]
 
     return df
 
@@ -148,9 +137,5 @@ def jaccard_similarity(str1, str2):
     return float(intersection) / union
 
 
-def write_with_jdbc(
-    df: DataFrame, table_name: str, jdbc_url: str, connection_props: dict
-) -> None:
-    df.write.jdbc(
-        url=jdbc_url, table=table_name, mode="append", properties=connection_props
-    )
+def write_with_jdbc(df: DataFrame, table_name: str, jdbc_url: str, connection_props: dict) -> None:
+    df.write.jdbc(url=jdbc_url, table=table_name, mode="append", properties=connection_props)

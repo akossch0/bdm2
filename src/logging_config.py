@@ -14,9 +14,7 @@ def configure_logger(module_name=__name__, log_level=logging.INFO):
     if logger.hasHandlers():
         logger.handlers.clear()
 
-    formatter = logging.Formatter(
-        "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-    )
+    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
     stream_handler = logging.StreamHandler()
     stream_handler.setLevel(log_level)
@@ -26,9 +24,7 @@ def configure_logger(module_name=__name__, log_level=logging.INFO):
     if not os.path.exists("logs"):
         os.makedirs("logs")
 
-    log_filename = (
-        f"logs/log_{module_name}_{datetime.now().strftime('%Y%m%d_%H%M')}.log"
-    )
+    log_filename = f"logs/log_{module_name}_{datetime.now().strftime('%Y%m%d_%H%M')}.log"
     file_handler = logging.FileHandler(log_filename)
     file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(formatter)

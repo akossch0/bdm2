@@ -8,18 +8,10 @@ validate_env()
 log_env()
 
 # Create the configuration in the local machine and give a name to the application
-conf = (
-    SparkConf()
-    .set("spark.master", "local")
-    .set("spark.app.name", "Spark Dataframes Tutorial")
-)
+conf = SparkConf().set("spark.master", "local").set("spark.app.name", "Spark Dataframes Tutorial")
 
 # Create the session
-spark = (
-    SparkSession.builder.config(conf=conf)
-    .config("spark.jars.packages", "org.apache.spark:spark-avro_2.12:3.5.1")
-    .getOrCreate()
-)
+spark = SparkSession.builder.config(conf=conf).config("spark.jars.packages", "org.apache.spark:spark-avro_2.12:3.5.1").getOrCreate()
 print(f"Python version = {spark.sparkContext.pythonVer}")
 print(f"Spark version = {spark.version}")
 print(spark.sparkContext.getConf().getAll())
