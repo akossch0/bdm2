@@ -47,7 +47,7 @@ make model-inference
 - password: D4qKbYH3XR
 
 # Appendix
-We had some problems with the OpenNebula platform, so we decided to also use a local Hadoop cluster with Docker. Below are the instructions to set up the cluster.
+We had some problems with the OpenNebula platform, so we decided to also use a local MongoDB and PostgreSQL instances with Docker. Below are the instructions to set up the instances.
 ## Setup PostgreSQL instance with docker
 
 Prerequisites:
